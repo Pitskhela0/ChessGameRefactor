@@ -1,8 +1,8 @@
-package Model.pieces;
+package model.pieces;
 
-import Model.Board;
-import Model.Piece;
-import Model.Square;
+import model.Board;
+import model.Piece;
+import model.Square;
 
 import java.util.List;
 

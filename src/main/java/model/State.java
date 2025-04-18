@@ -1,12 +1,12 @@
-package Model;
+package model;
 
-import Model.pieces.*;
+import model.pieces.*;
 import java.util.LinkedList;
 
 /**
  * Central model class that holds the overall state of the chess game.
  */
-public class GameState {
+public class State {
     private Board board;
     private model.Player whitePlayer;
     private model.Player blackPlayer;
@@ -49,7 +49,7 @@ public class GameState {
      * @param timeMinutes Minutes component of the time control
      * @param timeSeconds Seconds component of the time control
      */
-    public GameState(String whiteName, String blackName, int timeHours, int timeMinutes, int timeSeconds) {
+    public State(String whiteName, String blackName, int timeHours, int timeMinutes, int timeSeconds) {
         // Initialize players
         this.whitePlayer = new model.Player(whiteName, 1, new LinkedList<>(),
                 convertToMillis(timeHours, timeMinutes, timeSeconds));

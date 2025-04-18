@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -6,9 +6,9 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 
-import Model.pieces.King;
+import model.pieces.King;
 import util.ResourceManager;
-import View.PieceView;
+import view.PieceView;
 
 /**
  * Abstract base class for all chess pieces.

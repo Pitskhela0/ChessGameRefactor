@@ -1,8 +1,8 @@
-package Model;
+package model;
 
-import Model.pieces.Bishop;
-import Model.pieces.King;
-import Model.pieces.Queen;
+import model.pieces.Bishop;
+import model.pieces.King;
+import model.pieces.Queen;
 
 import java.util.HashMap;
 import java.util.Iterator;

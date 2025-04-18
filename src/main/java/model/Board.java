@@ -1,9 +1,7 @@
-package Model;
+package model;
 
-import Controller.CheckmateDetector;
-import Controller.GameController;
-import Model.pieces.*;
-import util.ResourceManager;
+import controller.GameController;
+import model.pieces.*;
 
 import javax.swing.*;
 import java.awt.*;
