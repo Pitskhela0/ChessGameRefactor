@@ -1,4 +1,9 @@
+package Controller;
 
+import Model.Board;
+import Model.Piece;
+import Model.Square;
+import Model.pieces.King;
 
 import java.util.HashMap;
 import java.util.Iterator;
