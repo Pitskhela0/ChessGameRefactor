@@ -1,5 +1,9 @@
 package Model.pieces;
 
+import Model.Board;
+import Model.Piece;
+import Model.Square;
+
 import java.util.List;
 
 public class Bishop extends Piece {
