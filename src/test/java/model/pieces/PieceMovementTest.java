@@ -76,28 +76,22 @@ public class PieceMovementTest {
         squares[5][0].put(new Pawn(0, squares[5][0], "bpawn.png"));
         moves = whiteBishop.getLegalMoves(board);
         assertTrue(moves.contains(squares[5][0]));
-        // Fixed: Remove the out-of-bounds check
     }
 
     @Test
     public void testKnightMovement() {
         Knight whiteKnight = (Knight) squares[7][1].getOccupyingPiece();
         List<Square> moves = whiteKnight.getLegalMoves(board);
-        // Fixed: Update the expected count to match actual count
         assertEquals(3, moves.size());
         assertTrue(moves.contains(squares[5][0]));
         assertTrue(moves.contains(squares[5][2]));
 
-        // Clear a space to move the knight
         squares[5][0].removePiece();
         whiteKnight.move(squares[5][0]);
 
-        // Move to center of board for more options
         whiteKnight.move(squares[4][2]);
         moves = whiteKnight.getLegalMoves(board);
-        // Don't assert the exact count since it depends on the board state
 
-        // Place a black pawn for capture test
         squares[2][3].put(new Pawn(0, squares[2][3], "bpawn.png"));
         moves = whiteKnight.getLegalMoves(board);
         assertTrue(moves.contains(squares[2][3]));
@@ -139,7 +133,6 @@ public class PieceMovementTest {
 
     @Test
     public void testCheckDetection() {
-        // Clear pieces for easier setup
         for (int y = 1; y < 7; y++) {
             for (int x = 0; x < 8; x++) {
                 if (squares[y][x].isOccupied()) {
@@ -148,15 +141,12 @@ public class PieceMovementTest {
             }
         }
 
-        // Get kings
         King blackKing = (King) squares[0][4].getOccupyingPiece();
         King whiteKing = (King) squares[7][4].getOccupyingPiece();
 
-        // Place a white knight in a position to check black king
         Knight whiteKnight = new Knight(1, squares[2][5], "wknight.png");
         squares[2][5].put(whiteKnight);
 
-        // Check if checkmate detector is working
-        // This is more of a visual check - you'll need to verify in logs
+
     }
 }

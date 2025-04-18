@@ -18,26 +18,21 @@ public class PawnPromotionTest {
 
     @Before
     public void setUp() {
-        // Create test board
         GameController controller = new GameController("White", "Black", 0, 1, 0);
         board = controller.getGameState().getBoard();
         squares = board.getSquareArray();
 
-        // Create a pawn close to promotion
         whitePawn = (Pawn) squares[6][0].getOccupyingPiece();
 
-        // Clear the way to the promotion square
         for (int i = 1; i < 6; i++) {
             squares[i][0].removePiece();
         }
 
-        // Move pawn to the 2nd rank (one move from promotion)
         whitePawn.move(squares[1][0]);
     }
 
     @Test
     public void testPawnPromotion() {
-        // Clear the board for easy testing
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 if (squares[y][x].isOccupied()) {
@@ -46,14 +41,12 @@ public class PawnPromotionTest {
             }
         }
 
-        // Place a white pawn one move away from promotion
         Pawn whitePawn = new Pawn(1, squares[1][0], "wpawn.png");
         squares[1][0].put(whitePawn);
 
-        // Move to promotion rank
         whitePawn.move(squares[0][0]);
 
-        // Check if the piece was promoted to a Queen (default)
+        // Check if the piece was promoted to a Queen
         Piece promotedPiece = squares[0][0].getOccupyingPiece();
         assertNotNull("Promoted piece should exist", promotedPiece);
         assertTrue("Pawn should be promoted to Queen", promotedPiece instanceof Queen);
@@ -75,14 +68,11 @@ public class PawnPromotionTest {
 
     @Test
     public void testPawnPromotionOptions() {
-        // Clear a portion of the board
         squares[1][1].removePiece();
 
-        // Place a white pawn one move away from promotion
         Pawn whitePawn = new Pawn(1, squares[1][1], "wpawn.png");
         squares[1][1].put(whitePawn);
 
-        // Manually test different promotion options
         whitePawn.move(squares[0][1]);
         Piece queen = whitePawn.promote(squares[0][1], "Queen");
         assertTrue("Should promote to Queen", queen instanceof Queen);
@@ -109,10 +99,8 @@ public class PawnPromotionTest {
 
     @Test
     public void testPromotionOptions() {
-        // Move pawn to the promotion rank
         whitePawn.move(squares[0][0]);
 
-        // Test promoting to different pieces
         Piece queen = whitePawn.promote(squares[0][0],"Queen");
         assertTrue("Should be able to promote to Queen", queen instanceof Queen);
 
