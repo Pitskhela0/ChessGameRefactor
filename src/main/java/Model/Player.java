@@ -1,6 +1,4 @@
-package model;
-
-import Model.Piece;
+package Model;
 
 import java.util.LinkedList;
 
@@ -82,13 +80,19 @@ public class Player {
     private int getPieceValue(Piece piece) {
         // Get the class name instead of using instanceof
         String className = piece.getClass().getSimpleName();
-        return switch (className) {
-            case "Pawn" -> 1;
-            case "Knight" -> 3;
-            case "Bishop" -> 3;
-            case "Rook" -> 5;
-            case "Queen" -> 9;
-            default -> 0;
-        };
+        switch (className) {
+            case "Pawn":
+                return 1;
+            case "Knight":
+                return 3;
+            case "Bishop":
+                return 3;
+            case "Rook":
+                return 5;
+            case "Queen":
+                return 9;
+            default:
+                return 0;
+        }
     }
 }

@@ -3,65 +3,134 @@ package Model;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
+import Model.pieces.King;
+import util.ResourceManager;
+import View.PieceView;
 
+/**
+ * Abstract base class for all chess pieces.
+ */
 public abstract class Piece {
     private final int color;
     private Square currentSquare;
     private BufferedImage img;
+    private PieceView view;
 
-    public Piece(int color, Square initSq, String img_file) {
+    /**
+     * Constructs a new chess piece.
+     *
+     * @param color The piece color (0 for black, 1 for white)
+     * @param initSq The initial square position
+     * @param imgFile The image file name for this piece
+     */
+    // In Piece constructor
+    public Piece(int color, Square initSq, String imgFile) {
         this.color = color;
         this.currentSquare = initSq;
 
-        try {
-            if (this.img == null) {
-                this.img = ImageIO.read(getClass().getResource(img_file));
-            }
-        } catch (IOException e) {
-            System.out.println("File not found: " + e.getMessage());
+        // Use ResourceManager to load the image
+        this.img = ResourceManager.loadImage(imgFile);
+
+        if (this.img == null) {
+            System.err.println("Failed to load piece image: " + imgFile);
         }
     }
 
-    public boolean move(Square fin) {
-        Piece occup = fin.getOccupyingPiece();
+    /**
+     * Sets the view component for this piece.
+     *
+     * @param view The PieceView for rendering this piece
+     */
+    public void setView(PieceView view) {
+        this.view = view;
+    }
 
-        if (occup != null) {
-            if (occup.getColor() == this.color) return false;
-            else fin.capture(this);
+    /**
+     * Gets the view component for this piece.
+     *
+     * @return The PieceView
+     */
+    public PieceView getView() {
+        return this.view;
+    }
+
+    /**
+     * Moves the piece to a destination square.
+     *
+     * @param destination The square to move to
+     * @return true if the move was successful, false otherwise
+     */
+    public boolean move(Square destination) {
+        Piece occupant = destination.getOccupyingPiece();
+
+        // Prevent king capture
+        if (occupant != null) {
+            if (occupant.getClass().equals(King.class)) {
+                System.out.println("Cannot capture king - must checkmate");
+                return false;
+            }
+
+            if (occupant.getColor() == this.color) return false;
+            else destination.capture(this);
         }
 
         currentSquare.removePiece();
-        this.currentSquare = fin;
+        this.currentSquare = destination;
         currentSquare.put(this);
         return true;
     }
 
+
+    /**
+     * Gets the current position of the piece.
+     *
+     * @return The square the piece is on
+     */
     public Square getPosition() {
         return currentSquare;
     }
 
+    /**
+     * Sets the position of the piece.
+     *
+     * @param sq The new position square
+     */
     public void setPosition(Square sq) {
         this.currentSquare = sq;
     }
 
+    /**
+     * Gets the color of the piece.
+     *
+     * @return The piece color (0 for black, 1 for white)
+     */
     public int getColor() {
         return color;
     }
 
+    /**
+     * Gets the image representing this piece.
+     *
+     * @return The piece image
+     */
     public Image getImage() {
         return img;
     }
 
+    /**
+     * Draws the piece at its current position.
+     *
+     * @param g The graphics context to draw on
+     */
     public void draw(Graphics g) {
-        int x = currentSquare.getX();
-        int y = currentSquare.getY();
-
-        g.drawImage(this.img, x, y, null);
+        if (currentSquare != null && img != null) {
+            int x = currentSquare.getX();
+            int y = currentSquare.getY();
+            g.drawImage(this.img, x, y, null);
+        }
     }
 
     public int[] getLinearOccupations(Square[][] board, int x, int y) {
@@ -107,6 +176,7 @@ public abstract class Piece {
         return occups;
     }
 
+    // The rest of the methods remain unchanged
     public List<Square> getDiagonalOccupations(Square[][] board, int x, int y) {
         LinkedList<Square> diagOccup = new LinkedList<Square>();
 
@@ -182,6 +252,12 @@ public abstract class Piece {
         return diagOccup;
     }
 
-    // No implementation, to be implemented by each subclass
+
+    /**
+     * Gets the legal moves for this piece on the current board.
+     *
+     * @param b The current game board
+     * @return List of squares this piece can legally move to
+     */
     public abstract List<Square> getLegalMoves(Board b);
 }

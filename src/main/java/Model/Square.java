@@ -62,7 +62,11 @@ public class Square extends JComponent {
         this.occupyingPiece = null;
         return p;
     }
-
+    public String getPositionName() {
+        char file = (char)('a' + this.xNum);
+        int rank = 8 - this.yNum;
+        return file + "" + rank;
+    }
     public void capture(Piece p) {
         Piece k = getOccupyingPiece();
         if (k.getColor() == 0) b.Bpieces.remove(k);
