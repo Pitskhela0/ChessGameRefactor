@@ -4,6 +4,7 @@ import view.GameWindow;
 import model.*;
 import model.pieces.*;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -120,44 +121,39 @@ public class GameController {
             return false;
         }
 
-        // Get starting position for logging
-        Square startSquare = piece.getPosition();
-        String pieceName = getPieceName(piece);
-        String startPos = getSquareNotation(startSquare);
-        String endPos = getSquareNotation(destination);
-
         // Execute move
         boolean moveSuccessful = piece.move(destination);
 
         if (moveSuccessful) {
-            // Log the move
-            String playerColor = piece.getColor() == 1 ? "White" : "Black";
-            System.out.println(playerColor + " " + pieceName + ": " + startPos + " → " + endPos);
-
             // Update game state
             state.toggleTurn();
 
             if (checkmateDetector != null) {
                 checkmateDetector.update();
 
+                // Update check status
+                state.setWhiteInCheck(checkmateDetector.whiteInCheck());
+                state.setBlackInCheck(checkmateDetector.blackInCheck());
+
                 // Check for checkmate
                 if (checkmateDetector.blackCheckMated()) {
-                    System.out.println("Checkmate! White wins.");
                     state.endGame("White wins by checkmate");
                     view.notifyCheckmate(1); // White wins
                     return true;
                 } else if (checkmateDetector.whiteCheckMated()) {
-                    System.out.println("Checkmate! Black wins.");
                     state.endGame("Black wins by checkmate");
                     view.notifyCheckmate(0); // Black wins
                     return true;
                 }
 
-                // Check status
-                if (checkmateDetector.blackInCheck()) {
-                    System.out.println("Black king is in check!");
-                } else if (checkmateDetector.whiteInCheck()) {
-                    System.out.println("White king is in check!");
+                // Announce check if applicable
+                if (state.isWhiteInCheck() || state.isBlackInCheck()) {
+                    SwingUtilities.invokeLater(() -> {
+                        JOptionPane.showMessageDialog(null,
+                                (state.isWhiteInCheck() ? "White" : "Black") + " king is in check!",
+                                "Check",
+                                JOptionPane.WARNING_MESSAGE);
+                    });
                 }
             }
         }
