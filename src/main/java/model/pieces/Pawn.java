@@ -31,13 +31,91 @@ public class Pawn extends Piece {
      * @param destination The square to move to
      * @return true if move was successful, false otherwise
      */
+//    @Override
+//    public boolean move(Square destination) {
+//        boolean moveSuccessful = super.move(destination);
+//        if (moveSuccessful) {
+//            wasMoved = true;
+//        }
+//        return moveSuccessful;
+//    }
     @Override
     public boolean move(Square destination) {
         boolean moveSuccessful = super.move(destination);
         if (moveSuccessful) {
             wasMoved = true;
+
+            // Check for promotion
+            checkPromotion(destination);
         }
         return moveSuccessful;
+    }
+
+    /**
+     * Checks if pawn has reached the promotion rank and handles promotion
+     */
+    private void checkPromotion(Square square) {
+        int y = square.getYNum();
+
+        // White pawn reaches the top rank (0)
+        if (this.getColor() == 1 && y == 0) {
+            promote(square, "Queen"); // Default to Queen promotion
+        }
+        // Black pawn reaches the bottom rank (7)
+        else if (this.getColor() == 0 && y == 7) {
+            promote(square, "Queen"); // Default to Queen promotion
+        }
+    }
+
+    /**
+     * Promotes pawn to specified piece type
+     *
+     * @param square The square where the pawn is located
+     * @param pieceType Type of piece to promote to ("Queen", "Rook", "Bishop", "Knight")
+     * @return The new piece after promotion
+     */
+    public Piece promote(Square square, String pieceType) {
+        Board board = square.getBoard();
+        int color = this.getColor();
+        Piece newPiece = null;
+
+        // Create appropriate piece based on promotion choice
+        switch (pieceType) {
+            case "Queen":
+                String queenImg = (color == 1) ? "wqueen.png" : "bqueen.png";
+                newPiece = new Queen(color, square, queenImg);
+                break;
+            case "Rook":
+                String rookImg = (color == 1) ? "wrook.png" : "brook.png";
+                newPiece = new Rook(color, square, rookImg);
+                break;
+            case "Bishop":
+                String bishopImg = (color == 1) ? "wbishop.png" : "bbishop.png";
+                newPiece = new Bishop(color, square, bishopImg);
+                break;
+            case "Knight":
+                String knightImg = (color == 1) ? "wknight.png" : "bknight.png";
+                newPiece = new Knight(color, square, knightImg);
+                break;
+            default:
+                String defaultImg = (color == 1) ? "wqueen.png" : "bqueen.png";
+                newPiece = new Queen(color, square, defaultImg);
+        }
+
+        // Replace pawn with new piece on the board
+        square.removePiece();
+        square.put(newPiece);
+
+        // Update the piece lists in the board
+        if (color == 1) {
+            board.Wpieces.remove(this);
+            board.Wpieces.add(newPiece);
+        } else {
+            board.Bpieces.remove(this);
+            board.Bpieces.add(newPiece);
+        }
+
+        return newPiece;
     }
 
     /**

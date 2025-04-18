@@ -233,6 +233,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
             return;
         }
 
+
+
+
+
+
         // Use controller to get legal moves
         List<Square> legalMoves = controller.getLegalMoves(currPiece);
         List<Square> allowableMoves = controller.getAllowableSquares();
@@ -253,6 +258,39 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
             // Not a valid move
             currPiece.getPosition().setDisplay(true);
         }
+
+        if (currPiece != null && currPiece instanceof Pawn) {
+            Pawn pawn = (Pawn) currPiece;
+            Square square = pawn.getPosition();
+
+            // Check if pawn is on promotion rank
+            boolean isPromotionRank = (pawn.getColor() == 1 && square.getYNum() == 0) ||
+                    (pawn.getColor() == 0 && square.getYNum() == 7);
+
+            if (isPromotionRank) {
+                // Show promotion dialog
+                String[] options = {"Queen", "Rook", "Bishop", "Knight"};
+                int choice = JOptionPane.showOptionDialog(
+                        this,
+                        "Choose promotion piece:",
+                        "Pawn Promotion",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                // Promote pawn
+                String promotionChoice = (choice >= 0) ? options[choice] : "Queen";
+                pawn.promote(square, promotionChoice);
+            }
+        }
+
+
+
+
+
 
         currPiece = null;
         repaint();

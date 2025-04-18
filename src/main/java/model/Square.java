@@ -99,4 +99,8 @@ public class Square extends JComponent {
         return result;
     }
 
+    public Board getBoard() {
+        return this.b;
+    }
+
 }
