@@ -5,12 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.Board;
-import model.Piece;
-import model.Player;
 import model.Square;
 import model.State;
 import model.pieces.*;
-import model.Move;
 
 import java.util.List;
 
